@@ -64,5 +64,20 @@ namespace aspNetCoreWeb.ThreadKnowledge
             var newWeatherForecast = JsonSerializer.Deserialize<WeatherForecast>(retJson);
             return await retJson1;
         }
+
+        [HttpGet]
+        public Task<string> GetJsonTask()
+        {
+
+            var weatherForecast = new WeatherForecast() { Date = DateTime.Now, Summary = "test", TemperatureC = 12 };
+            var retJson = JsonSerializer.Serialize(weatherForecast);
+            var retJson1 = Task.Run(() =>
+            {
+                Thread.Sleep(10000);
+                return retJson;
+            });
+
+            return retJson1;
+        }
     }
 }
