@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,8 +9,20 @@ namespace aspNetCoreWeb.algorithm
     /// <summary>
     /// 算法： *代表难度 *越多难度越大
     /// </summary>
-    public class EasyAlgorithm
+    [ApiController]
+    [Route("[controller]/[action]")]
+    public class EasyAlgorithm : ControllerBase
     {
+        [HttpGet]
+        public string AlgorithmData(string input)
+        {
+            var ret = string.Empty;
+            ret = LengthOfLongestSubstring(input).ToString();
+            ret += LengthOfLongestSubstring_fast(input).ToString();
+            return ret;
+        }
+
+
         #region 1. 两数之和（*）
         /// <summary>
         /// 1. 两数之和（*）
@@ -67,6 +80,64 @@ namespace aspNetCoreWeb.algorithm
             }
 
             return new[] { inti, intj };
+        }
+        #endregion
+
+        #region 2、最大无重复字符串（**）
+        /// <summary>
+        /// 描述：基础版
+        /// 姓名：mipan
+        /// 日期：2021年3月21日
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public int LengthOfLongestSubstring(string s)
+        {
+            var charArray = s.ToCharArray();
+            var lengthOfubstring = new HashSet<char>();
+            var j = 0;
+            var maxLength = 0;
+            for (int i = 0; i < charArray.Length; i++)
+            {
+                lengthOfubstring.Clear();
+                lengthOfubstring.Add(charArray[i]);
+                j = i + 1;
+                while (j < charArray.Length && !lengthOfubstring.Contains(charArray[j]))
+                {
+                    lengthOfubstring.Add(charArray[j]);
+                    j++;
+                }
+                maxLength = lengthOfubstring.Count > maxLength ? lengthOfubstring.Count : maxLength;
+            }
+
+            return maxLength;
+        }
+
+        /// <summary>
+        /// 描述：优化版-类似双指针
+        /// 姓名：mipan
+        /// 日期：2021年3月21日
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public int LengthOfLongestSubstring_fast(string s)
+        {
+            var charArray = s.ToCharArray();
+            var j = 0;
+            var lengthOfubstring = new HashSet<char>();
+            var maxLength = 0;
+            for (int i = 0; i < s.Length; i++)
+            {
+                while (lengthOfubstring.Contains(s[i]))
+                {
+                    lengthOfubstring.Remove(s[j++]);
+                }
+                lengthOfubstring.Add(s[i]);
+                if (lengthOfubstring.Count > maxLength)
+                    maxLength = lengthOfubstring.Count;
+            }
+
+            return maxLength;
         }
         #endregion
     }
