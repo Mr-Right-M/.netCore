@@ -17,8 +17,12 @@ namespace aspNetCoreWeb.algorithm
         public string AlgorithmData(string input)
         {
             var ret = string.Empty;
-            ret = LengthOfLongestSubstring(input).ToString();
-            ret += LengthOfLongestSubstring_fast(input).ToString();
+            //ret = LengthOfLongestSubstring(input).ToString();
+            //ret += LengthOfLongestSubstring_fast(input).ToString();
+            var nums1 = new[] { 1, 3 };
+            var nums2 = new[] { 2 };
+            //ret = FindMedianSortedArrays(nums1, nums2).ToString();
+            ret = Reverse(100).ToString();
             return ret;
         }
 
@@ -138,6 +142,128 @@ namespace aspNetCoreWeb.algorithm
             }
 
             return maxLength;
+        }
+        #endregion
+
+        #region 3、寻找两个正序数组的中位数
+        /// <summary>
+        /// 描述：给定两个大小分别为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的 中位数 。
+        /// 中位数：如果数据的个数是奇数，则中间那个数据就是这群数据的中位数；如果数据的个数是偶数，则中间那2个数据的算术平均值就是这群数据的中位数
+        /// 输入：nums1 = [1,3], nums2 = [2]
+        /// 输出：2.00000
+        /// 解释：合并数组 = [1,2,3] ，中位数 2
+        /// 姓名：mipan
+        /// 日期：2021年3月22日
+        /// </summary>
+        /// <param name="nums1"></param>
+        /// <param name="nums2"></param>
+        /// <returns></returns>
+        private double FindMedianSortedArrays(int[] nums1, int[] nums2)
+        {
+            double retNumber = 0f;
+
+            var mergeNum = new int[nums1.Length + nums2.Length];
+            var num = new int[2];
+            if (mergeNum.Length % 2 == 0)
+            {
+                num[0] = (int)Math.Floor((decimal)mergeNum.Length / 2);
+                num[1] = (int)Math.Ceiling((decimal)mergeNum.Length / 2 + 0.01m);
+            }
+            else
+            {
+                num[0] = (int)Math.Floor((decimal)mergeNum.Length / 2);
+                num[1] = -1;
+            }
+            for (int i = 0; i < nums1.Length; i++)
+            {
+                mergeNum[i] = nums1[i];
+            }
+            for (int i = 0; i < nums2.Length; i++)
+            {
+                mergeNum[nums1.Length + i] = nums2[i];
+            }
+
+            var nowNum = 1;
+            var tempSet = new Dictionary<int, int>();
+
+            var tempNum1 = 0;
+            var tempNum2 = 0;
+
+            for (int i = 0; i < mergeNum.Length; i++)
+            {
+                if ((i + 1) < mergeNum.Length && mergeNum[i + 1] > mergeNum[i])
+                {
+                    nowNum += 1;
+                    if (nowNum == num[0] || nowNum == num[1])
+                    {
+                        tempNum1 = mergeNum[i];
+                        if (tempSet.TryGetValue(nowNum, out tempNum2))
+                        {
+                            tempSet.Add(nowNum, tempNum1 > tempNum2 ? tempNum2 : tempNum1);
+                        }
+                        else
+                        {
+                            tempSet.Add(nowNum, tempNum1);
+                        }
+                    }
+                }
+                else
+                {
+                    nowNum -= 1;
+                    if ((i + 1) < (mergeNum.Length) && (nowNum == num[0] || nowNum == num[1]))
+                    {
+                        tempNum1 = mergeNum[i];
+                        if (tempSet.TryGetValue(nowNum, out tempNum2))
+                        {
+                            tempSet.Remove(nowNum);
+                            tempSet.Add(nowNum, tempNum1 > tempNum2 ? tempNum1 : tempNum2);
+                        }
+                        else
+                        {
+                            tempSet.Add(nowNum, tempNum1);
+                        }
+                    }
+                }
+
+            }
+
+            return (double)tempSet.Values.Sum() / tempSet.Values.Count();
+        }
+        #endregion
+
+        #region 4、整数反转
+        /// <summary>
+        /// 描述：给你一个 32 位的有符号整数 x ，返回将 x 中的数字部分反转后的结果。
+        /// 如果反转后整数超过 32 位的有符号整数的范围[−231, 231 − 1] ，就返回 0。
+        /// 假设环境不允许存储 64 位整数（有符号或无符号）。
+        /// 输入：x = 123
+        /// 输出：321
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
+        public int Reverse(int x)
+        {
+            int retNum = 0;
+            int temp = 0;
+
+            while (x != 0)
+            {
+                temp = x % 10;
+                //判断是否 大于 最大32位整数
+                if (retNum > 214748364 || (retNum == 214748364 && temp > 7))
+                {
+                    return 0;
+                }
+                //判断是否 小于 最小32位整数
+                if (retNum < -214748364 || (retNum == -214748364 && temp < -8))
+                {
+                    return 0;
+                }
+                retNum += retNum * 10 + temp;
+
+                x = x / 10;
+            }
+            return retNum;
         }
         #endregion
     }

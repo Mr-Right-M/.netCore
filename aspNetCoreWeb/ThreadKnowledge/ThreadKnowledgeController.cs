@@ -18,7 +18,7 @@ namespace aspNetCoreWeb.ThreadKnowledge
     {
 
         /// <summary>
-        /// async、await配合使用
+        /// 异步编程：async、await配合使用
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -65,6 +65,10 @@ namespace aspNetCoreWeb.ThreadKnowledge
             return await retJson1;
         }
 
+        /// <summary>
+        /// 异步编程二：基于任务的异步编程
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public Task<string> GetJsonTask()
         {
@@ -79,5 +83,46 @@ namespace aspNetCoreWeb.ThreadKnowledge
 
             return retJson1;
         }
+
+
+        /// <summary>
+        /// 多线程：基于thread
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public string GetJsonThread()
+        {
+            var weatherForecast = new WeatherForecast() { Date = DateTime.Now, Summary = "test", TemperatureC = 12 };
+            var retJson = string.Empty;
+            Thread thread = new Thread(new ThreadStart(() =>
+            {
+                retJson = InstanceMethod("test");
+            }));
+
+            thread.Start();
+            thread.Join();
+            return retJson;
+        }
+
+        /// <summary>
+        /// 描述：线程调用方法
+        /// 姓名：mipan
+        /// 日期：2021年3月21日
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static string InstanceMethod(string input)
+        {
+            Console.WriteLine(
+                "ServerClass.InstanceMethod is running on another thread.");
+
+            // Pause for a moment to provide a delay to make
+            // threads more apparent.
+            Thread.Sleep(3000);
+            Console.WriteLine(
+                "The instance method called by the worker thread has ended.");
+            return input;
+        }
+
     }
 }
