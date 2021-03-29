@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace aspNetCoreWeb.algorithm
@@ -14,15 +15,17 @@ namespace aspNetCoreWeb.algorithm
     public class EasyAlgorithm : ControllerBase
     {
         [HttpGet]
-        public string AlgorithmData(string input)
+        public string AlgorithmData(string input1, string input2, string input3)
         {
             var ret = string.Empty;
             //ret = LengthOfLongestSubstring(input).ToString();
             //ret += LengthOfLongestSubstring_fast(input).ToString();
-            var nums1 = new[] { 1, 3 };
-            var nums2 = new[] { 2 };
+            //var nums1 = new[] { 1, 3 };
+            //var nums2 = new[] { 2 };
             //ret = FindMedianSortedArrays(nums1, nums2).ToString();
-            ret = Reverse(100).ToString();
+            //ret = Reverse(100).ToString();
+
+            ret = RepleaceStr(input1, input2, input3);
             return ret;
         }
 
@@ -265,6 +268,47 @@ namespace aspNetCoreWeb.algorithm
             }
             return retNum;
         }
+        #endregion
+
+        #region 5、字符串替换
+
+        /// <summary>
+        /// A、B、C是3个字符串。把A中包含的所有B都替换为C.如果替换以后还有B就继续替换，直到A不包含B为止。
+        /// 1.请编写程序实现以上功能。不允许使用系统提供的字符串比较、查找和替换函数。
+        /// 2.以上程序是否总是能正常输出结果?如果不是，列出哪些情况下无法正常输出结果，尽可能详细和全面。
+        /// </summary>
+        string ret = string.Empty;
+        public string RepleaceStr(string a, string b, string c)
+        {
+            StringBuilder str = new StringBuilder();
+            int flag = 0;
+            for (var i = 0; i < a.Length; i++)
+            {
+                for (var j = 0; j < b.Length; j++)
+                {
+                    if (a[i + j] != b[j] || a.Length - i < (b.Length - j))
+                        break;
+                    flag++;
+                }
+                if (flag == b.Length)
+                {
+                    i += b.Length - 1;
+                    str.Append(c);
+                }
+                else
+                {
+                    str.Append(a[i]);
+                }
+            }
+            if (ret.Length <= 0 || (ret.Length > str.Length && ret.Length > 0))
+            {
+                ret = str.ToString();
+                return RepleaceStr(str.ToString(), b, c);
+            }
+            else
+                return ret;
+        }
+
         #endregion
     }
 }
