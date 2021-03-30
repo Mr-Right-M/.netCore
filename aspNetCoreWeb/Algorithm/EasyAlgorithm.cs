@@ -25,7 +25,13 @@ namespace aspNetCoreWeb.algorithm
             //ret = FindMedianSortedArrays(nums1, nums2).ToString();
             //ret = Reverse(100).ToString();
 
-            ret = RepleaceStr(input1, input2, input3);
+            //ret = RepleaceStr(input1, input2, input3);
+            int[][] matirxD = new int[][]
+            {
+                new int [] { 1 ,3,5}
+            };
+            ret = SearchMatrix(matirxD, 3).ToString();
+            ret = SearchMatrix(matirxD, 0).ToString();
             return ret;
         }
 
@@ -270,7 +276,7 @@ namespace aspNetCoreWeb.algorithm
         }
         #endregion
 
-        #region 5、字符串替换
+        #region 5、字符串替换（亦我信息技术面试题）
 
         /// <summary>
         /// A、B、C是3个字符串。把A中包含的所有B都替换为C.如果替换以后还有B就继续替换，直到A不包含B为止。
@@ -309,6 +315,45 @@ namespace aspNetCoreWeb.algorithm
                 return ret;
         }
 
+        #endregion
+
+        #region
+        /// <summary>
+        /// 描述：编写一个高效的算法来判断 m x n 矩阵中，是否存在一个目标值。该矩阵具有如下特性：
+        /// 每行中的整数从左到右按升序排列。
+        /// 每行的第一个整数大于前一行的最后一个整数。
+        /// 链接：https://leetcode-cn.com/problems/search-a-2d-matrix
+        /// 输入：matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 3
+        /// int[][] matirxD = new int[][]
+        ///   {
+        ///     new int[4]  { 1, 3, 5, 7 } ,
+        ///     new int[4] { 10, 11, 16, 20 },
+        ///     new int[4] { 23, 30, 34, 60 }
+        ///   };
+        /// 输出：true
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        public bool SearchMatrix(int[][] matrix, int target)
+        {
+            bool ret = false;
+
+            // 方法一：行只循环一次、列全循环
+            for (var i = 0; i < matrix.Length; i++)
+            {
+                if (matrix[i][matrix[i].Length - 1] >= target && matrix[i][0] <= target)
+                {
+                    for (var j = 0; j < matrix[i].Length; j++)
+                    {
+                        if (matrix[i][j] == target)
+                            ret = true;
+                    }
+                }
+            }
+
+            return ret;
+        }
         #endregion
     }
 }
