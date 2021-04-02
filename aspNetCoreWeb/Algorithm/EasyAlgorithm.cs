@@ -26,12 +26,15 @@ namespace aspNetCoreWeb.algorithm
             //ret = Reverse(100).ToString();
 
             //ret = RepleaceStr(input1, input2, input3);
-            int[][] matirxD = new int[][]
-            {
-                new int [] { 1 ,3,5}
-            };
-            ret = SearchMatrix(matirxD, 3).ToString();
-            ret = SearchMatrix(matirxD, 0).ToString();
+            //int[][] matirxD = new int[][]
+            //{
+            //    new int [] { 1 ,3,5}
+            //};
+            //ret = SearchMatrix(matirxD, 3).ToString();
+            //ret = SearchMatrix(matirxD, 0).ToString();
+
+            ret = Search(new int[] { 1 }, 2).ToString();
+
             return ret;
         }
 
@@ -317,7 +320,7 @@ namespace aspNetCoreWeb.algorithm
 
         #endregion
 
-        #region
+        #region 6、矩阵判断
         /// <summary>
         /// 描述：编写一个高效的算法来判断 m x n 矩阵中，是否存在一个目标值。该矩阵具有如下特性：
         /// 每行中的整数从左到右按升序排列。
@@ -354,6 +357,36 @@ namespace aspNetCoreWeb.algorithm
 
             return ret;
         }
+        #endregion
+
+        #region 7、二分查找
+        /// <summary>
+        /// 描述：二分查找目标值，不存在返回-1 存在返回下表
+        /// 姓名：mipan
+        /// 日期：2021年4月2日
+        /// </summary>
+        /// <param name="nums">数组</param>
+        /// <param name="target">目标值</param>
+        /// <returns></returns>
+        public int Search(int[] nums, int target)
+        {
+            nums = new int[] { 5 };
+            target = 2;
+            int low = 0, high = nums.Length - 1;
+
+            while (low <= high)
+            {
+                int mid = low + (high - low) / 2;
+                if (nums[mid] == target)
+                    return mid;
+                if (nums[mid] > target)
+                    high = mid - 1;
+                else
+                    low = mid + 1;
+            }
+            return -1;
+        }
+
         #endregion
     }
 }
