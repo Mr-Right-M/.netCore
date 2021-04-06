@@ -34,7 +34,7 @@ namespace aspNetCoreWeb.algorithm
             //ret = SearchMatrix(matirxD, 0).ToString();
 
             ret = Search(new int[] { 1 }, 2).ToString();
-
+            ret = RemoveDuplicates(new int[] { 1, 1, 2, 2, 2, 2, 5, 5, 6 }).ToString();
             return ret;
         }
 
@@ -385,6 +385,57 @@ namespace aspNetCoreWeb.algorithm
                     low = mid + 1;
             }
             return -1;
+        }
+
+        #endregion
+
+        #region 8、删除有序数组中的重复项 II
+
+        /// <summary>
+        /// 给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使每个元素 最多出现两次 ，返回删除后数组的新长度。
+        /// 不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
+        /// 
+        /// 输入：nums = [1,1,1,2,2,3]
+        /// 输出：5, nums = [1,1,2,2,3]
+        /// 解释：函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3 。 不需要考虑数组中超出新长度后面的元素。
+        /// </summary>
+        /// <param name="nums"></param>
+        /// <returns></returns>
+        public int RemoveDuplicates(int[] nums)
+        {
+            // 标准双指针逻辑（最终返回慢指针）
+            //if (nums.Length <= 2)
+            //    return nums.Length;
+            //var low = 2;
+            //var high = 2;
+            //while (high < nums.Length)
+            //{
+            //    if (nums[low - 2] != nums[high])
+            //    {
+            //        nums[low] = nums[high];
+            //        low++;
+            //    }
+            //    high++;
+            //}
+
+            //return low;
+
+            // 改进版-也是双指针逻辑
+            if (nums.Length <= 0)
+                return 0;
+            var j = 1;
+            var count = 0;
+            for (var i = 1; i < nums.Length; i++)
+            {
+                if (nums[i] == nums[i - 1])
+                    count++;
+                else
+                    count = 1;
+
+                if (count <= 2)
+                    nums[j++] = nums[i];
+            }
+            return j;
         }
 
         #endregion
